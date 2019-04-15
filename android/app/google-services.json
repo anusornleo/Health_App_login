@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "16972084157",
+    "firebase_url": "https://calories-calculator-bcc85.firebaseio.com",
+    "project_id": "calories-calculator-bcc85",
+    "storage_bucket": "calories-calculator-bcc85.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:16972084157:android:67ae10248f07e3d8",
+        "android_client_info": {
+          "package_name": "com.example.health_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqTfES8myTdd8teEC2Ahr-68fBK9QN0iY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "16972084157-8rm4794dgt50jqvm0jla16m2et45oru2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
