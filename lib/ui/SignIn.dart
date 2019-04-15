@@ -174,9 +174,29 @@ class LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     getUser().then((user) {
+      setState(() {
+        loading = true;
+      });
       if (user != null) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Home(user: user)));
+        if (user.isEmailVerified) {
+          print("go to home screen");
+          setState(() {
+            loading = false;
+          });
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => Home(user: user)));
+        } else {
+          setState(() {
+            loading = false;
+          });
+          print("Please check your email to verified account");
+          // Navigator.push(
+          //     context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        }
+      } else {
+        setState(() {
+          loading = false;
+        });
       }
     });
   }
