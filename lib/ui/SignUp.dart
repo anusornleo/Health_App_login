@@ -322,9 +322,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                                         context: context,
                                         builder: (BuildContext context) =>
                                             AlertDialog(
-                                              title: Text("Error"),
-                                              content: Text(
-                                                  "Email or Password not Correct"),
+                                              title: Text("OK"),
+                                              content: Text("Check you Email"),
                                               actions: <Widget>[
                                                 FlatButton(
                                                     child: Text("Ok"),

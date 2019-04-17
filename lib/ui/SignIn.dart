@@ -133,6 +133,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:health_app/ui/Home.dart';
 import 'package:health_app/ui/SignUp.dart';
+import 'package:health_app/ui/SignUp1.dart';
+import 'package:health_app/ui/SignUp2.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -210,53 +212,81 @@ class LoginScreenState extends State<LoginScreen> {
     return Scaffold(
         body: Stack(
       children: <Widget>[
-        Padding(
-          padding: EdgeInsets.all(18),
-          child: Form(
-            key: _formkey,
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  controller: email,
-                  decoration: InputDecoration(labelText: "Email"),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value.isEmpty) return "Email is required";
-                  },
-                ),
-                TextFormField(
-                  controller: password,
-                  decoration: InputDecoration(labelText: "Password"),
-                  obscureText: true,
-                  validator: (value) {
-                    if (value.isEmpty) return "Password is required";
-                  },
-                ),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      flex: 1,
-                      child: RaisedButton(
-                        child: Text("Signin"),
-                        onPressed: () {
-                          setState(() {
-                            loading = true;
-                          });
-                          auth
-                              .signInWithEmailAndPassword(
-                            email: email.text,
-                            password: password.text,
-                          )
-                              .then((FirebaseUser user) {
-                            if (user.isEmailVerified) {
-                              print("go to home screen");
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Home(user: user)));
-                            } else {
-                              print(
-                                  "Please check your email to verified account");
+        SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(18),
+            child: Form(
+              key: _formkey,
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    width: 200,
+                    child: Image.asset("assets/img/2.png"),
+                  ),
+                  TextFormField(
+                    controller: email,
+                    decoration: InputDecoration(labelText: "Email"),
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value.isEmpty) return "Email is required";
+                    },
+                  ),
+                  TextFormField(
+                    controller: password,
+                    decoration: InputDecoration(labelText: "Password"),
+                    obscureText: true,
+                    validator: (value) {
+                      if (value.isEmpty) return "Password is required";
+                    },
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: RaisedButton(
+                          child: Text("Signin"),
+                          onPressed: () {
+                            setState(() {
+                              loading = true;
+                            });
+                            auth
+                                .signInWithEmailAndPassword(
+                              email: email.text,
+                              password: password.text,
+                            )
+                                .then((FirebaseUser user) {
+                              if (user.isEmailVerified) {
+                                print("go to home screen");
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            Home(user: user)));
+                              } else {
+                                print(
+                                    "Please check your email to verified account");
+                                setState(() {
+                                  loading = false;
+                                });
+                                showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                          title: Text(
+                                              "Please verified your Email"),
+                                          content: Text(
+                                              "Go to your email inbox and find latest 'noreply' and Click link from it"),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                              child: Text("Ok"),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                            )
+                                          ],
+                                        ));
+                              }
+                            }).catchError((error) {
+                              print("$error");
                               setState(() {
                                 loading = false;
                               });
@@ -264,10 +294,9 @@ class LoginScreenState extends State<LoginScreen> {
                                   context: context,
                                   builder: (BuildContext context) =>
                                       AlertDialog(
-                                        title:
-                                            Text("Please verified your Email"),
+                                        title: Text("Error"),
                                         content: Text(
-                                            "Go to your email inbox and find latest 'noreply' and Click link from it"),
+                                            "Email or Password not Correct"),
                                         actions: <Widget>[
                                           FlatButton(
                                             child: Text("Ok"),
@@ -276,42 +305,23 @@ class LoginScreenState extends State<LoginScreen> {
                                           )
                                         ],
                                       ));
-                            }
-                          }).catchError((error) {
-                            print("$error");
-                            setState(() {
-                              loading = false;
                             });
-                            showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                      title: Text("Error"),
-                                      content:
-                                          Text("Email or Password not Correct"),
-                                      actions: <Widget>[
-                                        FlatButton(
-                                          child: Text("Ok"),
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                        )
-                                      ],
-                                    ));
-                          });
-                        },
+                          },
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                FlatButton(
-                  child: Text("Register new user"),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => RegisterScreen()));
-                  },
-                )
-              ],
+                    ],
+                  ),
+                  FlatButton(
+                    child: Text("Register new user"),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RegisFirst()));
+                    },
+                  )
+                ],
+              ),
             ),
           ),
         ),
