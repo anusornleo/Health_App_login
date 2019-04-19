@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gradient_widgets/gradient_widgets.dart';
+import 'package:health_app/ui/ButtonGradient.dart';
 import 'package:health_app/ui/SignUp2.dart';
+import 'package:health_app/ui/alert_ok.dart';
 
 class RegisFirst extends StatefulWidget {
   @override
@@ -24,7 +27,6 @@ class RegisFirstState extends State<RegisFirst> {
         body: Center(
       child: SingleChildScrollView(
         child: Container(
-          color: Colors.amber,
           child: Padding(
               padding: EdgeInsets.only(top: 0, left: 18, right: 18, bottom: 0),
               child: Form(
@@ -32,7 +34,7 @@ class RegisFirstState extends State<RegisFirst> {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      "data",
+                      "Create Your Account",
                       style: TextStyle(fontSize: 30),
                     ),
                     TextFormField(
@@ -43,6 +45,7 @@ class RegisFirstState extends State<RegisFirst> {
                       },
                     ),
                     TextFormField(
+                      keyboardType: TextInputType.emailAddress,
                       controller: emailController,
                       decoration: InputDecoration(labelText: 'Email'),
                       validator: (value) {
@@ -51,6 +54,7 @@ class RegisFirstState extends State<RegisFirst> {
                     ),
                     TextFormField(
                       controller: passwordController,
+                      obscureText: true,
                       decoration: InputDecoration(labelText: 'Password'),
                       validator: (value) {
                         if (value.isEmpty) return "Password is required";
@@ -58,6 +62,7 @@ class RegisFirstState extends State<RegisFirst> {
                     ),
                     TextFormField(
                       controller: rePasswordController,
+                      obscureText: true,
                       decoration: InputDecoration(labelText: 'Password Again'),
                       validator: (value) {
                         if (value.isEmpty) return "Password is required";
@@ -66,29 +71,73 @@ class RegisFirstState extends State<RegisFirst> {
                     ButtonBar(
                       alignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        FlatButton(
-                          color: Colors.blue,
-                          child: Text("Cancle"),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                        FlatButton(
-                          color: Colors.blue,
-                          child: Text("Next"),
-                          onPressed: () {
-                            if (_formkey.currentState.validate()) {
-                              dataRegis['username'] = usernameController.text;
-                              dataRegis['email'] = emailController.text;
-                              dataRegis['password'] = passwordController.text;
-                              print(dataRegis);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => RegisSecond()));
-                            }
-                          },
-                        )
+                        FlatGradientButton(
+                            width: 100,
+                            child: Text(
+                              'Cancle',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            gradient: LinearGradient(
+                              colors: <Color>[
+                                Color(0xFF3366FF),
+                                Color(0xFF00CCFF)
+                              ],
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            }),
+                        FlatGradientButton(
+                            width: 100,
+                            child: Text(
+                              'Next',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            gradient: LinearGradient(
+                              colors: <Color>[
+                                Color(0xFF3366FF),
+                                Color(0xFF00CCFF)
+                              ],
+                            ),
+                            onPressed: () {
+                              if (_formkey.currentState.validate()) {
+                                if (!RegExp(
+                                        r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                    .hasMatch(emailController.text)) {
+                                  alert_box(
+                                      "Email Format Incollect",
+                                      "Please check you Email again and Input collect Format",
+                                      context);
+                                } else if (passwordController.text.length < 8 ||
+                                    rePasswordController.text.length < 8) {
+                                  alert_box(
+                                      "The Password must have more than 8 characters",
+                                      "Please check you Password both TextField again",
+                                      context);
+                                } else if (passwordController.text !=
+                                    rePasswordController.text) {
+                                  alert_box(
+                                      "The password is not the same.",
+                                      "Please check you password in TextField again",
+                                      context);
+                                } else {
+                                  dataRegis['username'] =
+                                      usernameController.text;
+                                  dataRegis['email'] = emailController.text;
+                                  dataRegis['password'] =
+                                      passwordController.text;
+                                  print(dataRegis);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              RegisSecond(dataRegis)));
+                                }
+                              }
+                            }),
                       ],
                     )
                   ],

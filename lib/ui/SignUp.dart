@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:health_app/ui/ButtonGradient.dart';
 import 'package:health_app/ui/SignIn.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
+import 'package:health_app/ui/alert_ok.dart';
+import 'package:gradient_widgets/gradient_widgets.dart';
 
 // class SignUp extends StatefulWidget {
 //   @override
@@ -209,15 +212,18 @@ import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart
 import 'package:progress_indicators/progress_indicators.dart';
 
 class RegisterScreen extends StatefulWidget {
+  Map dataRegis = new Map();
+  RegisterScreen(this.dataRegis);
   @override
   State<RegisterScreen> createState() {
-    return RegisterScreenState();
+    return RegisterScreenState(dataRegis);
   }
 }
 
 class RegisterScreenState extends State<RegisterScreen> {
-  final _formkey = GlobalKey<FormState>();
-
+  // AlertOK alertOK = new AlertOK('6', '4');
+  Map dataRegis = new Map();
+  RegisterScreenState(this.dataRegis);
   FirebaseAuth auth = FirebaseAuth.instance;
   // FirebaseUser user;
 
@@ -250,111 +256,330 @@ class RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Register new user"),
-        ),
         body: Stack(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(18),
-              child: Form(
-                key: _formkey,
+      children: <Widget>[
+        Center(
+          child: SingleChildScrollView(
+            child: Container(
+              child: Padding(
+                padding:
+                    EdgeInsets.only(top: 0, left: 18, right: 18, bottom: 0),
                 child: Column(
                   children: <Widget>[
-                    TextFormField(
-                      controller: emailController,
-                      decoration: InputDecoration(labelText: "Email"),
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value.isEmpty) return "Email is required";
-                      },
+                    Text(
+                      "Check Information",
+                      style: TextStyle(fontSize: 30),
                     ),
-                    TextFormField(
-                      controller: passwordController,
-                      decoration: InputDecoration(labelText: "Password"),
-                      obscureText: true,
-                      validator: (value) {
-                        if (value.isEmpty && value.length < 8)
-                          return "Password is required";
-                      },
+                    Container(
+                      padding: EdgeInsets.only(
+                          left: 0, right: 0, bottom: 30, top: 30),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                              child: new Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                new Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Container(
+                                        height: 30,
+                                        child: Text("Username",
+                                            style: TextStyle(fontSize: 20))),
+                                    Container(
+                                      child: Text(dataRegis['username'],
+                                          style: TextStyle(fontSize: 18)),
+                                    ),
+                                  ],
+                                ),
+                                new Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Container(
+                                        height: 30,
+                                        child: Text("Email",
+                                            style: TextStyle(fontSize: 20))),
+                                    Container(
+                                      child: Text(dataRegis['email'],
+                                          style: TextStyle(fontSize: 18)),
+                                    ),
+                                  ],
+                                ),
+                                new Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Container(
+                                        height: 30,
+                                        child: Text("Genger",
+                                            style: TextStyle(fontSize: 20))),
+                                    Container(
+                                      child: Text(dataRegis['gen'],
+                                          style: TextStyle(fontSize: 20)),
+                                    ),
+                                  ],
+                                ),
+                                new Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Container(
+                                        height: 30,
+                                        child: Text("Date of Birth",
+                                            style: TextStyle(fontSize: 20))),
+                                    Container(
+                                      child: Text(dataRegis['dob'],
+                                          style: TextStyle(fontSize: 20)),
+                                    ),
+                                  ],
+                                ),
+                                new Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Container(
+                                        height: 30,
+                                        child: Text("Age",
+                                            style: TextStyle(fontSize: 20))),
+                                    Container(
+                                      child: Text(
+                                          dataRegis['age'].toString() +
+                                              ' Years',
+                                          style: TextStyle(fontSize: 20)),
+                                    ),
+                                  ],
+                                ),
+                                new Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Container(
+                                        height: 30,
+                                        child: Text("Height",
+                                            style: TextStyle(fontSize: 20))),
+                                    Container(
+                                      child: Text(dataRegis['height'] + ' cm.',
+                                          style: TextStyle(fontSize: 20)),
+                                    ),
+                                  ],
+                                ),
+                                new Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Container(
+                                        height: 30,
+                                        child: Text("Weight",
+                                            style: TextStyle(fontSize: 20))),
+                                    Container(
+                                      child: Text(dataRegis['weight'] + ' Kg.',
+                                          style: TextStyle(fontSize: 20)),
+                                    ),
+                                  ],
+                                ),
+                              ])),
+                        ],
+                      ),
                     ),
-                    TextFormField(
-                      controller: rePasswordController,
-                      decoration: InputDecoration(labelText: "Re Password"),
-                      obscureText: true,
-                      validator: (value) {
-                        if (value.isEmpty) return "Password is required";
-                      },
-                    ),
-                    Row(
+                    ButtonBar(
+                      alignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Expanded(
-                          flex: 1,
-                          child: RaisedButton(
-                            child: Text("Register"),
+                        FlatGradientButton(
+                            width: 100,
+                            child: Text(
+                              'Previous',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            gradient: LinearGradient(
+                              colors: <Color>[
+                                Color(0xFF3366FF),
+                                Color(0xFF00CCFF)
+                              ],
+                            ),
                             onPressed: () {
-                              if (_formkey.currentState.validate()) {
+                              Navigator.pop(context);
+                            }),
+                        FlatGradientButton(
+                            width: 120,
+                            child: Text(
+                              'Create Account',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            gradient: LinearGradient(
+                              colors: <Color>[
+                                Color(0xFF3366FF),
+                                Color(0xFF00CCFF)
+                              ],
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                loading = true;
+                              });
+                              auth
+                                  .createUserWithEmailAndPassword(
+                                      email: dataRegis['email'],
+                                      password: dataRegis['password'])
+                                  .then((FirebaseUser user) {
+                                Firestore.instance.runTransaction(
+                                    (Transaction transaction) async {
+                                  DocumentReference reference = Firestore
+                                      .instance
+                                      .collection('users')
+                                      .document('${user.uid}');
+                                  await reference.setData({
+                                    "username": dataRegis['username'],
+                                    "email": dataRegis["email"],
+                                    "gender": dataRegis['gen'],
+                                    "dob": dataRegis['dob'],
+                                    "age": dataRegis['age'],
+                                    "height": dataRegis['height'],
+                                    "weight": dataRegis['weight'],
+                                  });
+                                });
+                                user.sendEmailVerification().then((user) {
+                                  setState(() {
+                                    loading = false;
+                                  });
+                                  showDialog<String>(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                            title: Text("Will be completed"),
+                                            content: Text(
+                                                "We will sent Verify in your Email. Please Check in your Email, find 'noreply' and get Link"),
+                                            actions: <Widget>[
+                                              FlatButton(
+                                                  child: Text("Ok"),
+                                                  onPressed: () => Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              LoginScreen())))
+                                            ],
+                                          ));
+                                });
+                                print("return from firebase ${user.email}");
+                              }).catchError((error) {
                                 setState(() {
-                                  loading = true;
+                                  loading = false;
                                 });
-                                auth
-                                    .createUserWithEmailAndPassword(
-                                        email: emailController.text,
-                                        password: passwordController.text)
-                                    .then((FirebaseUser user) {
-                                  Firestore.instance.runTransaction(
-                                      (Transaction transaction) async {
-                                    DocumentReference reference = Firestore
-                                        .instance
-                                        .collection('users')
-                                        .document('${user.uid}');
-                                    await reference.setData({
-                                      "name": emailController.text,
-                                      "age": 20,
-                                      "job": 'god'
-                                    });
-                                  });
-                                  user.sendEmailVerification().then((user) {
-                                    setState(() {
-                                      loading = false;
-                                    });
-                                    showDialog<String>(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            AlertDialog(
-                                              title: Text("OK"),
-                                              content: Text("Check you Email"),
-                                              actions: <Widget>[
-                                                FlatButton(
-                                                    child: Text("Ok"),
-                                                    onPressed: () => Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                LoginScreen())))
-                                              ],
-                                            ));
-                                  });
-                                  print("return from firebase ${user.email}");
-                                }).catchError((error) {
-                                  print("$error");
-                                });
-                              } else {
-                                print("error");
-                              }
-                            },
-                          ),
-                        ),
+                                alert_box(
+                                    "The email address is already in use by another account",
+                                    "Please Login in this Account",
+                                    context);
+                              });
+                            }),
                       ],
-                    ),
+                    )
                   ],
                 ),
               ),
             ),
-            _showCircularProgress(),
-          ],
-        ));
+          ),
+        ),
+        _showCircularProgress(),
+      ],
+    ));
   }
+  //       body: Stack(
+  //         children: <Widget>[
+  //           Center(
+  //             child: Padding(
+  //               padding: EdgeInsets.all(10),
+  //               child: Column(
+  //                 children: <Widget>[
+  //                   Row(
+  //                     children: <Widget>[
+  //                       Expanded(
+  //                         flex: 1,
+  //                         child: RaisedButton(
+  //                           child: Text("Register"),
+  //                           onPressed: () {
+  //                             if (_formkey.currentState.validate()) {
+  //                               setState(() {
+  //                                 loading = true;
+  //                               });
+  //                               auth
+  //                                   .createUserWithEmailAndPassword(
+  //                                       email: emailController.text,
+  //                                       password: passwordController.text)
+  //                                   .then((FirebaseUser user) {
+  //                                 Firestore.instance.runTransaction(
+  //                                     (Transaction transaction) async {
+  //                                   DocumentReference reference = Firestore
+  //                                       .instance
+  //                                       .collection('users')
+  //                                       .document('${user.uid}');
+  //                                   await reference.setData({
+  //                                     "name": emailController.text,
+  //                                     "age": 20,
+  //                                     "job": 'god'
+  //                                   });
+  //                                 });
+  //                                 user.sendEmailVerification().then((user) {
+  //                                   setState(() {
+  //                                     loading = false;
+  //                                   });
+  //                                   showDialog<String>(
+  //                                       context: context,
+  //                                       builder: (BuildContext context) =>
+  //                                           AlertDialog(
+  //                                             title: Text("OK"),
+  //                                             content: Text("Check you Email"),
+  //                                             actions: <Widget>[
+  //                                               FlatButton(
+  //                                                   child: Text("Ok"),
+  //                                                   onPressed: () => Navigator.push(
+  //                                                       context,
+  //                                                       MaterialPageRoute(
+  //                                                           builder: (context) =>
+  //                                                               LoginScreen())))
+  //                                             ],
+  //                                           ));
+  //                                 });
+  //                                 print("return from firebase ${user.email}");
+  //                               }).catchError((error) {
+  //                                 print("$error");
+  //                               });
+  //                             } else {
+  //                               print("error");
+  //                             }
+  //                           },
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                   ButtonBar(
+  //                     alignment: MainAxisAlignment.spaceBetween,
+  //                     children: <Widget>[
+  //                       FlatButton(
+  //                         color: Colors.blue,
+  //                         child: Text("Cancle"),
+  //                         onPressed: () {
+  //                           Navigator.pop(context);
+  //                         },
+  //                       ),
+  //                       FlatButton(
+  //                         color: Colors.blue,
+  //                         child: Text("Next"),
+  //                         onPressed: () {},
+  //                       )
+  //                     ],
+  //                   )
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //           _showCircularProgress(),
+  //         ],
+  //       ));
+  // }
 
   // void _addData() {
   //   Firestore.instance.runTransaction((Transaction transaction) async {
