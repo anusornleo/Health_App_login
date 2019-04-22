@@ -9,6 +9,8 @@ import 'package:progress_indicators/progress_indicators.dart';
 // import 'package:healthapp/ui/foodUI.dart';
 
 bool loading = false;
+String _showEmail = "can't load data";
+String _showUsername = "can't load data";
 
 List<StaggeredTile> _staggeredTiles = const <StaggeredTile>[
   const StaggeredTile.count(4, 2),
@@ -43,87 +45,162 @@ class HomeState extends State<Home> {
   FirebaseUser user;
   HomeState(this.user);
   FirebaseAuth auth = FirebaseAuth.instance;
+
+  String _showEmail = "";
+  String _showUsername = "";
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Title',
-          style: TextStyle(
-            fontSize: 24.0,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        centerTitle: true,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [Color(0xFF3366FF), Color(0xFF00CCFF)],
-            ),
-          ),
-        ),
-      ),
-      body: Container(
-          color: Colors.blueGrey,
-          child: Padding(
-              padding: const EdgeInsets.only(top: 5.0),
-              child: new StaggeredGridView.count(
-                crossAxisCount: 4,
-                staggeredTiles: _staggeredTiles,
-                children: _tiles,
-                mainAxisSpacing: 0.0,
-                crossAxisSpacing: 0.0,
-                padding: const EdgeInsets.all(5.0),
-              ))),
-      drawer: Drawer(
-        child: new Column(
-          children: <Widget>[
-            new UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [Color(0xFF3366FF), Color(0xFF00CCFF)],
+    return StreamBuilder<DocumentSnapshot>(
+      stream: Firestore.instance
+          .collection('users')
+          .document('${user.uid}')
+          .snapshots(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return new Text('Error: ${snapshot.error}');
+        }
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return new Text('Loading...');
+          default:
+            // return Container(
+            //   child: Column(
+            //     children: <Widget>[
+            //       Text(snapshot.data['name']),
+            //     ],
+            //   ),
+            // );
+            return Scaffold(
+              appBar: AppBar(
+                title: Text("data"),
+                centerTitle: true,
+                flexibleSpace: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [Color(0xFF3366FF), Color(0xFF00CCFF)],
+                    ),
+                  ),
                 ),
               ),
-              accountName: StreamBuilder<DocumentSnapshot>(
-                stream: Firestore.instance
-                    .collection('users')
-                    .document('${user.uid}')
-                    .snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<DocumentSnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return new Text('Error: ${snapshot.error}');
-                  }
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.waiting:
-                      return new Text('Loading...');
-                    default:
-                      return Text(snapshot.data['email']);
-                  }
-                },
-              ),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Text(
-                  "A",
-                  style: TextStyle(fontSize: 40.0),
+              body: Container(
+                  color: Colors.blueGrey,
+                  child: Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: new StaggeredGridView.count(
+                        crossAxisCount: 4,
+                        staggeredTiles: _staggeredTiles,
+                        children: _tiles,
+                        mainAxisSpacing: 0.0,
+                        crossAxisSpacing: 0.0,
+                        padding: const EdgeInsets.all(5.0),
+                      ))),
+              drawer: Drawer(
+                child: new Column(
+                  children: <Widget>[
+                    new UserAccountsDrawerHeader(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [Color(0xFF3366FF), Color(0xFF00CCFF)],
+                        ),
+                      ),
+                      accountName: Text(snapshot.data['username']),
+                      accountEmail: Text(snapshot.data['email']),
+                      currentAccountPicture: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: Text(
+                          "A",
+                          style: TextStyle(fontSize: 40.0),
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      title: Text("Goal"),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      title: Text("Edit Profile"),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      title: Text("Setting"),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      title: Text("SignOut"),
+                      onTap: () {
+                        _logOut();
+                      },
+                    )
+                  ],
                 ),
               ),
-            ),
-            FlatButton(
-              child: Text("SignOut"),
-              onPressed: () {
-                _logOut();
-              },
-            )
-          ],
-        ),
-      ),
+            );
+        }
+      },
     );
+    // return Scaffold(
+    //   appBar: AppBar(
+    //     title: Text("data"),
+    //     centerTitle: true,
+    //     flexibleSpace: Container(
+    //       decoration: BoxDecoration(
+    //         gradient: LinearGradient(
+    //           begin: Alignment.centerLeft,
+    //           end: Alignment.centerRight,
+    //           colors: [Color(0xFF3366FF), Color(0xFF00CCFF)],
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    //   body: Container(
+    //       color: Colors.blueGrey,
+    //       child: Padding(
+    //           padding: const EdgeInsets.only(top: 5.0),
+    //           child: new StaggeredGridView.count(
+    //             crossAxisCount: 4,
+    //             staggeredTiles: _staggeredTiles,
+    //             children: _tiles,
+    //             mainAxisSpacing: 0.0,
+    //             crossAxisSpacing: 0.0,
+    //             padding: const EdgeInsets.all(5.0),
+    //           ))),
+    //   drawer: Drawer(
+    //     child: new Column(
+    //       children: <Widget>[
+    //         new UserAccountsDrawerHeader(
+    //           decoration: BoxDecoration(
+    //             gradient: LinearGradient(
+    //               begin: Alignment.centerLeft,
+    //               end: Alignment.centerRight,
+    //               colors: [Color(0xFF3366FF), Color(0xFF00CCFF)],
+    //             ),
+    //           ),
+    //           accountName: Text(this._showUsername),
+    //           accountEmail: Text(this._showEmail),
+    //           currentAccountPicture: CircleAvatar(
+    //             backgroundColor: Colors.white,
+    //             child: Text(
+    //               "A",
+    //               style: TextStyle(fontSize: 40.0),
+    //             ),
+    //           ),
+    //         ),
+    //         FlatButton(
+    //           child: Text("SignOut"),
+    //           onPressed: () {
+    //             _logOut();
+    //           },
+    //         )
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 
   _logOut() async {

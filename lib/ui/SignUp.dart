@@ -428,8 +428,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                                     (Transaction transaction) async {
                                   DocumentReference reference = Firestore
                                       .instance
-                                      .collection('fast_food_data')
-                                      .document();
+                                      .collection('users')
+                                      .document('${user.uid}');
                                   await reference.setData({
                                     "username": dataRegis['username'],
                                     "email": dataRegis["email"],
