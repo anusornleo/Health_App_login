@@ -5,7 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:health_app/ui/FoodUI.dart';
 import 'package:health_app/ui/SignIn.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 // import 'package:healthapp/ui/foodUI.dart';
+
+bool loading = false;
 
 List<StaggeredTile> _staggeredTiles = const <StaggeredTile>[
   const StaggeredTile.count(4, 2),
@@ -30,6 +33,7 @@ List<Widget> _tiles = const <Widget>[
 
 class Home extends StatefulWidget {
   final FirebaseUser user;
+
   const Home({Key key, this.user}) : super(key: key);
   @override
   HomeState createState() => HomeState(user);
@@ -84,24 +88,24 @@ class HomeState extends State<Home> {
                   colors: [Color(0xFF3366FF), Color(0xFF00CCFF)],
                 ),
               ),
-              // accountEmail: StreamBuilder<DocumentSnapshot>(
-              //   stream: Firestore.instance
-              //       .collection('users')
-              //       .document('${user.uid}')
-              //       .snapshots(),
-              //   builder: (BuildContext context,
-              //       AsyncSnapshot<DocumentSnapshot> snapshot) {
-              //     if (snapshot.hasError) {
-              //       return new Text('Error: ${snapshot.error}');
-              //     }
-              //     switch (snapshot.connectionState) {
-              //       case ConnectionState.waiting:
-              //         return new Text('Loading...');
-              //       default:
-              //         return Text(snapshot.data['email']);
-              //     }
-              //   },
-              // ),
+              accountName: StreamBuilder<DocumentSnapshot>(
+                stream: Firestore.instance
+                    .collection('users')
+                    .document('${user.uid}')
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return new Text('Error: ${snapshot.error}');
+                  }
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return new Text('Loading...');
+                    default:
+                      return Text(snapshot.data['email']);
+                  }
+                },
+              ),
               currentAccountPicture: CircleAvatar(
                 backgroundColor: Colors.white,
                 child: Text(

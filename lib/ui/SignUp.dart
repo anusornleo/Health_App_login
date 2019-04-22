@@ -221,11 +221,9 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class RegisterScreenState extends State<RegisterScreen> {
-  // AlertOK alertOK = new AlertOK('6', '4');
   Map dataRegis = new Map();
   RegisterScreenState(this.dataRegis);
   FirebaseAuth auth = FirebaseAuth.instance;
-  // FirebaseUser user;
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -430,8 +428,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                                     (Transaction transaction) async {
                                   DocumentReference reference = Firestore
                                       .instance
-                                      .collection('users')
-                                      .document('${user.uid}');
+                                      .collection('fast_food_data')
+                                      .document();
                                   await reference.setData({
                                     "username": dataRegis['username'],
                                     "email": dataRegis["email"],

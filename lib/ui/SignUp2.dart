@@ -275,7 +275,6 @@ class RegisSecondState extends State<RegisSecond> {
                                 dataRegis['gen'] = _gen;
                                 dataRegis['height'] = heightController.text;
                                 dataRegis['weight'] = weightController.text;
-                                print(dataRegis);
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(

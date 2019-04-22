@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -78,10 +79,10 @@ class Tile1 extends StatelessWidget {
       color: Colors.white,
       child: new InkWell(
           onTap: () {
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => OrdinalSales()));
+            Firestore.instance
+                .collection('food_data')
+                .document()
+                .setData({'title': 'title', 'author': 'author'});
           },
           child: Container(
             margin: const EdgeInsets.all(20.0),
