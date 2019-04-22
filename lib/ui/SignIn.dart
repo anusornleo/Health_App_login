@@ -149,7 +149,7 @@ class LoginScreenState extends State<LoginScreen> {
   FirebaseAuth auth = FirebaseAuth.instance;
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  bool loading = false;
+  bool loading = true;
 
   Widget _showCircularProgress() {
     if (loading) {
